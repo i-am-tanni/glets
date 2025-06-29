@@ -1,4 +1,4 @@
--module(simplicache).
+-module(glets).
 
 -export([
     new_table/2, lookup/2, whereis/1, identity/1

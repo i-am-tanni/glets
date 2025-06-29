@@ -10,7 +10,7 @@
 import gleam/erlang/process.{type Subject}
 import gleam/otp/actor
 import gleam/string
-import simplicache/table
+import glets/table
 
 /// A cache's owner process receives insertions and deletions as messages.
 /// This restriction maintains one writer and many readers.

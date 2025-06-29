@@ -176,13 +176,13 @@ pub fn whereis(table_name: a) -> Result(Set(k, v), Nil) {
   ets_whereis(table_name)
 }
 
-@external(erlang, "simplicache", "new_table")
+@external(erlang, "glets", "new_table")
 fn ets_new(name: a, options: List(Option)) -> Result(Set(k, v), Nil)
 
 @external(erlang, "ets", "insert")
 fn ets_insert_row(cache: Set(k, v), key_val: #(k, v)) -> Bool
 
-@external(erlang, "simplicache", "lookup")
+@external(erlang, "glets", "lookup")
 fn ets_lookup(cache: a, key: k) -> Result(List(#(k, v)), Nil)
 
 @external(erlang, "ets", "delete")
@@ -191,8 +191,8 @@ fn ets_delete_row(cache: Set(k, v), key: k) -> Bool
 @external(erlang, "ets", "delete")
 fn ets_delete_table(cache: Set(k, v)) -> Bool
 
-@external(erlang, "simplicache", "whereis")
+@external(erlang, "glets", "whereis")
 fn ets_whereis(table_name: a) -> Result(Set(k, v), Nil)
 
-@external(erlang, "simplicache", "identity")
+@external(erlang, "glets", "identity")
 fn privacy_to_atom(val: Privacy) -> Atom

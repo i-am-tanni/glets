@@ -1,6 +1,6 @@
 import gleeunit
 import gleeunit/should
-import simplicache/table
+import glets/table
 
 pub type TestTable {
   TestTable
