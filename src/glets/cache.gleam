@@ -51,7 +51,8 @@ pub fn start(
 /// 
 pub fn start_custom(
   table_name: process.Name(msg),
-  recv: fn(table.Set(k, v), msg) -> actor.Next(table.Set(k, v), msg),
+  state_constructor: fn(table.Set(k, v)) -> a,
+  recv: fn(a, msg) -> actor.Next(a, msg),
 ) -> Result(actor.Started(Subject(msg)), actor.StartError) {
   let result =
     table.new(table_name)
@@ -59,7 +60,8 @@ pub fn start_custom(
 
   case result {
     Ok(table) -> {
-      actor.new(table)
+      state_constructor(table)
+      |> actor.new()
       |> actor.named(table_name)
       |> actor.on_message(recv)
       |> actor.start
