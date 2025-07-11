@@ -196,3 +196,6 @@ fn ets_whereis(table_name: a) -> Result(Set(k, v), Nil)
 
 @external(erlang, "glets", "identity")
 fn privacy_to_atom(val: Privacy) -> Atom
+
+@external(erlang, "glets", "tab2list")
+pub fn tab2list(cache: Set(k, v)) -> List(#(k, v))

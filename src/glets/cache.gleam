@@ -9,6 +9,7 @@
 /// 
 import gleam/erlang/process.{type Subject}
 import gleam/otp/actor
+import gleam/result
 import gleam/string
 import glets/table
 
@@ -27,51 +28,36 @@ pub type Message(k, v) {
 pub fn start(
   table_name: process.Name(Message(k, v)),
 ) -> Result(actor.Started(Subject(Message(k, v))), actor.StartError) {
-  let result =
-    table.new(table_name)
-    |> table.set
-
-  case result {
-    Ok(table) -> {
-      actor.new(table)
-      |> actor.named(table_name)
-      |> actor.on_message(recv)
-      |> actor.start
-    }
-
-    Error(_) ->
-      Error(actor.InitFailed(
-        "Failed to start ets table: " <> string.inspect(table_name),
-      ))
-  }
+  actor.new_with_initialiser(100, fn(self) { init(self, table_name) })
+  |> actor.named(table_name)
+  |> actor.on_message(recv)
+  |> actor.start
 }
 
-/// Starts a custom cache process where the library user provides in the recv 
-/// fun.
-/// 
-pub fn start_custom(
-  table_name: process.Name(msg),
-  state_constructor: fn(table.Set(k, v)) -> a,
-  recv: fn(a, msg) -> actor.Next(a, msg),
-) -> Result(actor.Started(Subject(msg)), actor.StartError) {
-  let result =
-    table.new(table_name)
+fn init(
+  self: Subject(Message(k, v)),
+  table_name: process.Name(Message(k, v)),
+) -> Result(
+  actor.Initialised(
+    table.Set(k, v),
+    Message(k, v),
+    process.Subject(Message(k, v)),
+  ),
+  String,
+) {
+  let start_table =
+    table_name
+    |> table.new
     |> table.set
+    |> result.replace_error(
+      "Failed to start ets table: " <> string.inspect(table_name),
+    )
 
-  case result {
-    Ok(table) -> {
-      state_constructor(table)
-      |> actor.new()
-      |> actor.named(table_name)
-      |> actor.on_message(recv)
-      |> actor.start
-    }
-
-    Error(_) ->
-      Error(actor.InitFailed(
-        "Failed to start ets table: " <> string.inspect(table_name),
-      ))
-  }
+  use table <- result.try(start_table)
+  table
+  |> actor.initialised()
+  |> actor.returning(self)
+  |> Ok
 }
 
 /// A basic API for inserting and deleting from the key-val store.

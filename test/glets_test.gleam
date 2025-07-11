@@ -56,6 +56,11 @@ pub fn lookup_test() {
   assert is_success
 }
 
+pub fn tab2list_test() {
+  let assert Ok(table) = table.whereis(TestTable)
+  assert [#(Key, 1)] == table.tab2list(table)
+}
+
 pub fn delete_test() {
   let assert Ok(table) = table.whereis(TestTable)
   assert table.delete(table, Key)

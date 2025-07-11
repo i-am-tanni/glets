@@ -1,7 +1,7 @@
 -module(glets).
 
 -export([
-    new_table/2, lookup/2, whereis/1, identity/1
+    new_table/2, lookup/2, whereis/1, identity/1, tab2list/1
 ]).
 
 new_table(TableName, Options) ->
@@ -29,6 +29,13 @@ lookup(TableName, Key) ->
         {ok, ets:lookup(TableName, Key)}
     catch
         error:badarg -> {error, nil}
+    end.
+
+tab2list(TableName) ->
+    try
+        ets:tab2list(TableName)
+    catch
+        error:badarg -> []
     end.
 
 identity(X) -> X.
