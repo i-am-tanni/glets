@@ -1,4 +1,3 @@
-import gleeunit
 import gleeunit/should
 import glets/table
 
@@ -23,10 +22,6 @@ pub type Key {
   /// This key will not be inserted for the purposes of tests. We will test
   /// that a lookup on it will fail as expected.
   MissingKey
-}
-
-pub fn main() -> Nil {
-  gleeunit.main()
 }
 
 pub fn basic_table_test() {
