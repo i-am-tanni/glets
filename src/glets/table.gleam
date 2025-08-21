@@ -169,7 +169,9 @@ pub fn lookup(table_name: a, key: k) -> Result(v, Nil) {
   }
 }
 
-pub fn is_member(table_name: a, key: k) -> Bool {
+/// Confirms if table contains a key
+/// 
+pub fn has_key(table_name: a, key: k) -> Bool {
   case lookup(table_name, key) {
     Ok(_) -> True
     Error(Nil) -> False
