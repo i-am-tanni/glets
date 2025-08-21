@@ -169,6 +169,13 @@ pub fn lookup(table_name: a, key: k) -> Result(v, Nil) {
   }
 }
 
+pub fn is_member(table_name: a, key: k) -> Bool {
+  case lookup(table_name, key) {
+    Ok(_) -> True
+    Error(Nil) -> False
+  }
+}
+
 /// This function is intended for tests. 
 /// Returns the table id given a table name.
 /// 
