@@ -178,6 +178,10 @@ pub fn has_key(table_name: a, key: k) -> Bool {
   }
 }
 
+pub fn to_list(table_name: a) -> List(#(k, v)) {
+  ets_to_list(table_name)
+}
+
 /// This function is intended for tests. 
 /// Returns the table id given a table name.
 /// 
@@ -199,6 +203,9 @@ fn ets_delete_row(cache: Set(k, v), key: k) -> Bool
 
 @external(erlang, "ets", "delete")
 fn ets_delete_table(cache: Set(k, v)) -> Bool
+
+@external(erlang, "ets", "tab2list")
+fn ets_to_list(cache: a) -> List(#(k, v))
 
 @external(erlang, "glets", "whereis")
 fn ets_whereis(table_name: a) -> Result(Set(k, v), Nil)
